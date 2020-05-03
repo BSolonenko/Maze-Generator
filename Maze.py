@@ -1,3 +1,5 @@
+import json
+
 class Maze(object):
     def __init__(self, w, h):
         self.m_W = w
@@ -9,11 +11,13 @@ class Maze(object):
         self.SetOrderedWay(t, f)
     
     def SetOrderedWay(self, f, t):
+        f = str(f)
         if(not f in self.m_Maze):
             self.m_Maze[f] = []
         self.m_Maze[f].append(t)
 
     def HasPath(self, f, t):
+        f = str(f)
         if(not f in self.m_Maze):
             return False
         return t in self.m_Maze[f]
@@ -39,3 +43,16 @@ class Maze(object):
                     str += '__'
             print(str + '|')
         print('')
+
+    def ToJSON(self):
+        return json.dumps({
+            'Width': self.m_W,
+            'Height': self.m_H,
+            'Graph': self.m_Maze
+            })
+
+    def FromJSON(self, jsonString):
+        data = json.loads(jsonString)
+        self.m_W = data['Width']
+        self.m_H = data['Height']
+        self.m_Maze = data['Graph']
